@@ -5,6 +5,7 @@ import Sider from './components/Sider';
 import PrivateOutlet from './hoc/PrivateOutlet';
 import ProtectedOutlet from './hoc/ProtectedOutlet';
 import {useSelector} from './redux';
+import {Container, Row, Col} from 'react-bootstrap';
 
 const Home = React.lazy(async () => await import('./pages/home'));
 const Profile = React.lazy(async () => await import('./pages/profile'));
@@ -22,39 +23,41 @@ const App: React.FC = (): JSX.Element => {
 	const {pathname} = useLocation();
 	return (
 		<>
-			<Nav />
-			<main className='container-fluid'>
-				<div className='row'>
-					{user?.role === 'admin' && true && (
-						<div className='col-2 p-0'>
-							<Sider />
-						</div>
-					)}
-					<div className='col'>
-						<React.Suspense fallback='Loading...'>
-							<Routes>
-								<Route index element={<Home />} />
-								<Route path='/signin' element={<Signin />} />
-								<Route path='/register' element={<Register />} />
-								<Route element={<PrivateOutlet />}>
-									<Route path='/account' element={<Profile />} />
-								</Route>
-								<Route path='/products' element>
-									<Route path=':id' element={<Product />}>
-										<Route element={<ProtectedOutlet />}>
-											<Route path='edit' element={<EditProduct />} />
-										</Route>
-										<Route path='add' element={<AddProduct />} />
+			<Container fluid className='p-0'>
+				<Nav />
+				<Container fluid className='px-0'>
+					<Row>
+						{user?.role === 'admin' && (
+							<Col md={1} lg={2}>
+								<Sider />
+							</Col>
+						)}
+						<Col>
+							<React.Suspense fallback='Loading...'>
+								<Routes>
+									<Route index element={<Home />} />
+									<Route path='/signin' element={<Signin />} />
+									<Route path='/register' element={<Register />} />
+									<Route element={<PrivateOutlet />}>
+										<Route path='/account' element={<Profile />} />
 									</Route>
-								</Route>
-								<Route element={<ProtectedOutlet />}>
-									<Route path='/dashboard' element={<Dashboard />} />
-								</Route>
-							</Routes>
-						</React.Suspense>
-					</div>
-				</div>
-			</main>
+									<Route path='/products' element>
+										<Route path=':id' element={<Product />}>
+											<Route element={<ProtectedOutlet />}>
+												<Route path='edit' element={<EditProduct />} />
+											</Route>
+											<Route path='add' element={<AddProduct />} />
+										</Route>
+									</Route>
+									<Route element={<ProtectedOutlet />}>
+										<Route path='/dashboard' element={<Dashboard />} />
+									</Route>
+								</Routes>
+							</React.Suspense>
+						</Col>
+					</Row>
+				</Container>
+			</Container>
 		</>
 	);
 };

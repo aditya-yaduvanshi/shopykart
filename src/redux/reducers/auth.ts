@@ -9,7 +9,7 @@ const initialState: AuthInitialState = {
     email: 'name@email.com',
     phone: '989311111',
     id: 'djiutssytdcgchj',
-    role: 'admin'
+    role: 'customer'
   },
   signedIn: true,
   loading: false,
