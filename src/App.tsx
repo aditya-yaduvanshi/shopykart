@@ -8,15 +8,15 @@ import {useSelector} from './redux';
 import {Container, Row, Col} from 'react-bootstrap';
 
 const Home = React.lazy(async () => await import('./pages/home'));
-const Profile = React.lazy(async () => await import('./pages/profile'));
-const Signin = React.lazy(async () => await import('./pages/signin'));
-const Register = React.lazy(async () => await import('./pages/register'));
+const Profile = React.lazy(async () => await import('./pages/account/profile'));
+const Signin = React.lazy(async () => await import('./pages/account/signin'));
+const Register = React.lazy(async () => await import('./pages/account/register'));
 const Product = React.lazy(async () => await import('./pages/product'));
-const Dashboard = React.lazy(async () => await import('./pages/dashboard'));
+const Dashboard = React.lazy(async () => await import('./pages/admin/dashboard'));
 const EditProduct = React.lazy(
-	async () => await import('./pages/edit-product')
+	async () => await import('./pages/admin/edit-product')
 );
-const AddProduct = React.lazy(async () => await import('./pages/add-product'));
+const AddProduct = React.lazy(async () => await import('./pages/admin/add-product'));
 
 const App: React.FC = (): JSX.Element => {
 	const {user} = useSelector((state) => state.auth);

@@ -1,3 +1,3 @@
 export * from './store';
-export * from './reducers/auth';
-export * from './actions/auth';
+export * from './reducers';
+export * from './actions';

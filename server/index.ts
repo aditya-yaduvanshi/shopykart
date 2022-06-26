@@ -2,20 +2,37 @@ import express, {Request, Response} from 'express';
 import {config} from 'dotenv';
 import path from 'path';
 import mongoose from 'mongoose';
+import {
+	accountRouter,
+	productRouter,
+	categoryRouter,
+	cartRouter,
+	orderRouter,
+} from './routes';
 config();
 
 const app = express();
-const {PORT, MONGO_URI} = process.env;
+const {PORT, MONGO_URI, NODE_ENV} = process.env;
+
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 app.get('/api', async (_req: Request, res: Response) => {
 	res.send('Om Namah Shivay');
 });
+app.use('/api/categories', categoryRouter);
+app.use('/api/accounts', accountRouter);
+app.use('/api/products', productRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/carts', cartRouter);
 
-app.use(express.static(path.join(__dirname, '../client/assets')));
+if (NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, '../client/assets')));
 
-app.get('*', (_req, res) => {
-	res.sendFile(path.join(__dirname, '../client/index.html'));
-});
+	app.get('*', (_req, res) => {
+		res.sendFile(path.join(__dirname, '../client/index.html'));
+	});
+}
 
 mongoose
 	.connect(`${MONGO_URI}`)

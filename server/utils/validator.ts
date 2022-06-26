@@ -21,4 +21,8 @@ export class Validator {
 	static isUserRole(role: UserRole){
 		return Object.values(UserRole).includes(role);
 	}
+
+	static isValidDate(date: string){
+		return new Date().getTime() >= new Date(date).getTime();
+	}
 }

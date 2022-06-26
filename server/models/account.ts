@@ -1,4 +1,5 @@
-import {model, Schema} from 'mongoose';
+import {CallbackError, model, Schema} from 'mongoose';
+import {Verifier} from '../utils';
 import {Validator} from '../utils/validator';
 
 export enum UserRole {
@@ -12,8 +13,10 @@ export interface IAccount {
 	password: string;
 	avatar?: string;
 	role: UserRole;
-  access?: string;
-  refresh?: string;
+	access?: string;
+	refresh?: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 const AccountSchema = new Schema<IAccount>(
@@ -41,10 +44,21 @@ const AccountSchema = new Schema<IAccount>(
 			default: UserRole.user,
 			validate: [Validator.isUserRole, 'Invalid User Role'],
 		},
-    access: String,
-    refresh: String,
+		access: String,
+		refresh: String,
 	},
 	{timestamps: true}
 );
 
-export const Account = model('user', AccountSchema);
+AccountSchema.pre('save', async function (next) {
+	try {
+		this.name = this.name.split(' ').map(str => str.charAt(0).toUpperCase() + str.substring(1)).join(' ');
+		this.password = await Verifier.createHash(this.password);
+		next();
+	} catch (err) {
+		console.log('pre save',err);
+		next(err as CallbackError);
+	}
+});
+
+export const Account = model('accounts', AccountSchema);
