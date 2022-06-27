@@ -1,5 +1,5 @@
-import {CallbackError, model, Schema} from 'mongoose';
-import {Verifier} from '../utils';
+import {CallbackError, model, Schema, Document} from 'mongoose';
+import {Modifier, Verifier} from '../utils';
 import {Validator} from '../utils/validator';
 
 export enum UserRole {
@@ -13,13 +13,16 @@ export interface IAccount {
 	password: string;
 	avatar?: string;
 	role: UserRole;
+}
+
+export interface IAccountSchema extends IAccount, Document {
 	access?: string;
 	refresh?: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-const AccountSchema = new Schema<IAccount>(
+const AccountSchema = new Schema<IAccountSchema>(
 	{
 		name: {type: String, required: true, maxlength: 64, minlength: 4},
 		email: {
@@ -52,7 +55,7 @@ const AccountSchema = new Schema<IAccount>(
 
 AccountSchema.pre('save', async function (next) {
 	try {
-		this.name = this.name.split(' ').map(str => str.charAt(0).toUpperCase() + str.substring(1)).join(' ');
+		this.name = Modifier.capitalize(this.name);
 		this.password = await Verifier.createHash(this.password);
 		next();
 	} catch (err) {
@@ -61,10 +64,10 @@ AccountSchema.pre('save', async function (next) {
 	}
 });
 
-AccountSchema.pre('updateOne', async function (next) {
+AccountSchema.pre('updateOne', {document: true, query: false}, async function (next) {
 	try {
 		if(this.isModified('name'))
-			this.name = this.name.split(' ').map(str => str.charAt(0).toUpperCase() + str.substring(1)).join(' ');
+			this.name = Modifier.capitalize(this.name);
 
 		if(this.isModified('password'))
 			this.password = await Verifier.createHash(this.password);

@@ -21,7 +21,7 @@ router
 	.route('/auth')
 	.get(async (req, res) => {
 		try {
-			const body = req.body as IAuthGet;
+			const body: IAuthGet = req.body;
 			if (
 				!body.email ||
 				!body.password ||
@@ -69,7 +69,7 @@ router
 	})
 	.post(async (req, res) => {
 		try {
-			const body = req.body as IAuthPost;
+			const body: IAuthPost = req.body;
 			if (
 				!body.name ||
 				!body.email ||
@@ -119,7 +119,7 @@ router
 	.put(async (req: IRequest, res) => {
 		try {
 			if (!req.user) return res.sendStatus(401);
-			const body = req.body as Partial<IAuthPost>;
+			const body: Partial<IAuthPost> = req.body;
 			if (!Object.keys(body).length) return res.sendStatus(400);
 
 			// just implementing update api, No email verification or another api for forgot/update password for now.

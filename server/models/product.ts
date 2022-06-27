@@ -1,26 +1,39 @@
-import {model, ObjectId, Schema, Types} from 'mongoose';
-import {Validator} from '../utils';
+import {model, ObjectId, Schema, Types, Document} from 'mongoose';
+import {Modifier, Validator} from '../utils';
 
 export interface IProduct {
 	name: string;
-	slug: string;
 	description?: string;
 	price: number;
+	currency: string;
 	image?: string;
+	images?: Array<string>;
 	category: ObjectId;
 	brand: string;
 	attributes?: object;
 }
 
-export const ProductSchema = new Schema<IProduct>(
+export interface IProductSchema extends IProduct, Document {
+	slug: string;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export const ProductSchema = new Schema<IProductSchema>(
 	{
 		name: {type: String, required: true, maxlength: 100},
-		slug: {type: String, required: true, maxlength: 500, unique: true},
+		slug: {type: String, maxlength: 500, unique: true},
 		price: {type: Number, required: true, min: 1, max: 99999999},
+		currency: {type: String, required: true, maxlength: 50, default: 'INR'},
 		image: {
 			type: String,
 			maxlength: 500,
 			validate: [Validator.isUrl, 'Invalid Url'],
+		},
+		images: {
+			type: [String],
+			minlength: 1,
+			maxlength: 500,
 		},
 		category: {type: Types.ObjectId, required: true, ref: 'categories'},
 		brand: {type: String, required: true, maxlength: 100},
@@ -31,7 +44,13 @@ export const ProductSchema = new Schema<IProduct>(
 );
 
 ProductSchema.pre('save', function (next) {
-	this.slug = this.name.replace(/\s/, '-').concat(`-${this._id}`);
+	this.slug = Modifier.slugify(this.name, this._id);
+	next();
+});
+
+ProductSchema.pre('updateOne', {document: true, query: false}, function (next) {
+	if(this.isModified('name'))
+		this.slug = Modifier.slugify(this.name, this._id);
 	next();
 });
 

@@ -6,7 +6,7 @@ const router = Router();
 
 router
 	.route('/')
-	.get(async (req, res) => {
+	.get(async (_req, res) => {
 		try {
 			const categories = await Category.find();
 			return res.status(200).json({categories});
@@ -17,7 +17,7 @@ router
 	})
 	.post(Auth.isAuthenticated, Auth.isAuthorised, async (req, res) => {
 		try {
-			const body = req.body as ICategory;
+			const body: ICategory = req.body;
 			if (!body.name || !body.icon)
 				return res.status(400).json({msg: 'Invalid Data!'});
 
@@ -39,6 +39,7 @@ router
 		try {
 			const id = req.params.id;
 			const category = await Category.findById(id);
+			if(!category) return res.status(404).json({msg: 'Category Not Found!'});
 			return res.status(200).json({category});
 		} catch (err) {
 			console.log(err);
