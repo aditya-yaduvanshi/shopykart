@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {Account, IAccount, UserRole} from '../models';
+import {Account, UserRole} from '../models';
 import {Auth, IRequest} from '../middlewares';
 import {Validator, Verifier} from '../utils';
 
@@ -14,6 +14,7 @@ interface IAuthPost extends IAuthGet {
 	name: string;
 	avatar?: string;
 	password2: string;
+	role?: UserRole;
 }
 
 router
@@ -115,14 +116,41 @@ router
 			return res.sendStatus(500);
 		}
 	})
-	.put(async (req, res) => {
+	.put(async (req: IRequest, res) => {
 		try {
-			return res.sendStatus(204);
+			if (!req.user) return res.sendStatus(401);
+			const body = req.body as Partial<IAuthPost>;
+			if (!Object.keys(body).length) return res.sendStatus(400);
+
+			// just implementing update api, No email verification or another api for forgot/update password for now.
+			const updatedUser: Partial<IAuthPost> = {};
+			if (body.name) updatedUser.name = body.name;
+			if (body.email) updatedUser.email = body.email;
+			if (body.password) updatedUser.password = body.password;
+			if (
+				body.role &&
+				req.user.role === UserRole.admin &&
+				Validator.isUserRole(body.role)
+			)
+				updatedUser.role = body.role;
+
+			await Account.findByIdAndUpdate(req.user._id, updatedUser);
+			return res.status(200).json({msg: 'Account Updated!'});
 		} catch (err) {
 			console.log(err);
 			return res.sendStatus(500);
 		}
 	})
-	.delete(async (req, res) => {});
+	.delete(async (req: IRequest, res) => {
+		try {
+			const user = req.user;
+			if (!user) return res.sendStatus(401);
+			await Account.findByIdAndDelete(user._id);
+			return res.status(200).json({msg: 'Account Deleted!'});
+		} catch (err) {
+			console.log(err);
+			return res.sendStatus(500);
+		}
+	});
 
 export {router as accountRouter};

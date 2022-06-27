@@ -61,4 +61,19 @@ AccountSchema.pre('save', async function (next) {
 	}
 });
 
+AccountSchema.pre('updateOne', async function (next) {
+	try {
+		if(this.isModified('name'))
+			this.name = this.name.split(' ').map(str => str.charAt(0).toUpperCase() + str.substring(1)).join(' ');
+
+		if(this.isModified('password'))
+			this.password = await Verifier.createHash(this.password);
+		
+		next();
+	} catch (err) {
+		console.log('pre update one', err);
+		next(err as CallbackError);
+	}
+})
+
 export const Account = model('accounts', AccountSchema);

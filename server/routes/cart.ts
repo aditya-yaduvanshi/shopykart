@@ -7,7 +7,12 @@ const router = Router();
 router
   .route('/')
   .post(Auth.isAuthenticated, async (req, res) => {
-
+    try {
+      
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
   })
 
 router
