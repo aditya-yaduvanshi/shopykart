@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from '../../redux';
 
 const SignIn: React.FC = (): JSX.Element => {
+	const {signedIn} = useSelector(state => state.auth);
+	const navigate = useNavigate();
+
+	if(signedIn) navigate('/');
+
 	return (
 		<>
 			<form>

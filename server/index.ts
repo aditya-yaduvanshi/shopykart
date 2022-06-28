@@ -36,7 +36,8 @@ if (NODE_ENV === 'production') {
 
 mongoose
 	.connect(`${MONGO_URI}`)
-	.then((_) => console.log('db connected!'))
+	.then((_) => {
+		console.log('db connected!')
+		app.listen(PORT || 5000, () => console.log('server listening on:', PORT));
+	})
 	.catch((err) => console.error('DB ERROR', err));
-
-app.listen(PORT || 5000, () => console.log('server listening on:', PORT));
