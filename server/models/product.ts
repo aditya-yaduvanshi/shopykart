@@ -43,14 +43,22 @@ export const ProductSchema = new Schema<IProductSchema>(
 	{timestamps: true}
 );
 
+ProductSchema.index({name: 'text', brand: 'text', description: 'text', attributes: 'text'});
+
 ProductSchema.pre('save', function (next) {
 	this.slug = Modifier.slugify(this.name, this._id);
+	this.brand = this.brand.toUpperCase();
+	this.currency = this.currency.toUpperCase();
 	next();
 });
 
 ProductSchema.pre('updateOne', {document: true, query: false}, function (next) {
 	if(this.isModified('name'))
 		this.slug = Modifier.slugify(this.name, this._id);
+	if(this.isModified(this.brand))
+		this.brand = this.brand.toUpperCase();
+	if(this.isModified(this.currency))
+		this.currency = this.currency.toUpperCase();
 	next();
 });
 

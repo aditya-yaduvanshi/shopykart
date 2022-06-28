@@ -19,19 +19,14 @@ export class Auth {
 			req.user = user;
 			next();
 		} catch (err) {
-			console.log(err);
+			console.log('authentication error', (err as Error).message);
 			return res.sendStatus(500);
 		}
 	}
 
 	static async isAuthorised(req: IRequest, res: Response, next: NextFunction) {
-		try {
-			const user = req.user;
-			if (user?.role !== 'admin') return res.sendStatus(403);
-			next();
-		} catch (err) {
-			console.log(err);
-			return res.sendStatus(500);
-		}
+		const user = req.user;
+		if (user?.role !== 'admin') return res.sendStatus(403);
+		next();
 	}
 }

@@ -11,7 +11,7 @@ router
 			const categories = await Category.find();
 			return res.status(200).json({categories});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	})
@@ -28,7 +28,7 @@ router
 			await category.save();
 			return res.sendStatus(201);
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	});
@@ -42,7 +42,7 @@ router
 			if(!category) return res.status(404).json({msg: 'Category Not Found!'});
 			return res.status(200).json({category});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	})
@@ -62,7 +62,7 @@ router
 			await Category.findByIdAndUpdate(id, updatedCategory);
 			return res.status(200).json({msg: 'Category Updated!'});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	})
@@ -72,7 +72,7 @@ router
 			await Category.findByIdAndDelete(id);
 			return res.status(200).json({msg: 'Category Deleted!'});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	});

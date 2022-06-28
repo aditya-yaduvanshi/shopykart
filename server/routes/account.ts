@@ -63,7 +63,7 @@ router
 				},
 			});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	})
@@ -90,7 +90,7 @@ router
 			await account.save();
 			return res.sendStatus(201);
 		} catch (err) {
-			console.log('err', err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	});
@@ -112,7 +112,7 @@ router
 				updatedAt: me.updatedAt,
 			});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	})
@@ -137,7 +137,7 @@ router
 			await Account.findByIdAndUpdate(req.user._id, updatedUser);
 			return res.status(200).json({msg: 'Account Updated!'});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	})
@@ -148,7 +148,7 @@ router
 			await Account.findByIdAndDelete(user._id);
 			return res.status(200).json({msg: 'Account Deleted!'});
 		} catch (err) {
-			console.log(err);
+			console.log('err',(err as Error).message);
 			return res.sendStatus(500);
 		}
 	});
