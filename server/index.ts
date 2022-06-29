@@ -1,7 +1,9 @@
 import express, {Request, Response} from 'express';
 import {config} from 'dotenv';
 import path from 'path';
+import compression from 'compression';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import {
 	accountRouter,
 	productRouter,
@@ -14,6 +16,8 @@ config();
 const app = express();
 const {PORT, MONGO_URI, NODE_ENV} = process.env;
 
+app.use(cors());
+app.use(compression());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
@@ -26,13 +30,10 @@ app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/carts', cartRouter);
 
-if (NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, '../client/assets')));
-
-	app.get('*', (_req, res) => {
-		res.sendFile(path.join(__dirname, '../client/index.html'));
-	});
-}
+app.use('/assets', express.static(path.join(__dirname, '../client/assets')));
+app.get('*', (_req, res) => {
+	res.sendFile(path.join(__dirname, '../client/index.html'));
+});
 
 mongoose
 	.connect(`${MONGO_URI}`)
