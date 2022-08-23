@@ -1,9 +1,9 @@
 export interface AuthInitialState {
   user: User | null;
-  signedIn: boolean;
-  access: string | null;
-  refresh: string | null;
-  expiry: string | null;
+  accessToken: string | null;
+  accessExpiry: string | null;
+  refreshExpiry: string | null;
+  refreshToken: string | null;
   loading: boolean;
   error: any;
 }

@@ -5,7 +5,7 @@
   "scripts": {
     "preview": "vite preview",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:client": "vite --base=/client/",
+    "dev:client": "vite",
     "dev:server": "ts-node-dev --respawn --project tsconfig.server.json server",
     "build:server": "tsc --project tsconfig.server.json",
     "build:client": "tsc && vite build",

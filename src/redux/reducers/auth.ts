@@ -3,20 +3,13 @@ import { AuthInitialState } from "../../types/redux";
 import { register } from "../actions/auth";
 
 const initialState: AuthInitialState = {
-  user: {
-    name: 'name',
-    avatar: 'https://google.com',
-    email: 'name@email.com',
-    phone: '989311111',
-    id: 'djiutssytdcgchj',
-    role: 'customer'
-  },
-  signedIn: true,
+  user: null,
   loading: false,
   error: null,
-  access: null,
-  refresh: null,
-  expiry: null,
+  accessToken: null,
+  refreshToken: null,
+  accessExpiry: null,
+  refreshExpiry: null,
 }
 
 const auth: Slice<AuthInitialState> = createSlice({

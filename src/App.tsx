@@ -10,13 +10,19 @@ import {Container, Row, Col} from 'react-bootstrap';
 const Home = React.lazy(async () => await import('./pages/home'));
 const Profile = React.lazy(async () => await import('./pages/account/profile'));
 const Signin = React.lazy(async () => await import('./pages/account/signin'));
-const Register = React.lazy(async () => await import('./pages/account/register'));
+const Register = React.lazy(
+	async () => await import('./pages/account/register')
+);
 const Product = React.lazy(async () => await import('./pages/product'));
-const Dashboard = React.lazy(async () => await import('./pages/admin/dashboard'));
+const Dashboard = React.lazy(
+	async () => await import('./pages/admin/dashboard')
+);
 const EditProduct = React.lazy(
 	async () => await import('./pages/admin/edit-product')
 );
-const AddProduct = React.lazy(async () => await import('./pages/admin/add-product'));
+const AddProduct = React.lazy(
+	async () => await import('./pages/admin/add-product')
+);
 
 const App: React.FC = (): JSX.Element => {
 	const {user} = useSelector((state) => state.auth);
@@ -36,8 +42,8 @@ const App: React.FC = (): JSX.Element => {
 							<React.Suspense fallback='Loading...'>
 								<Routes>
 									<Route index element={<Home />} />
-									<Route path='/signin' element={<Signin />} />
-									<Route path='/register' element={<Register />} />
+									<Route path='/account/signin' element={<Signin />} />
+									<Route path='/account/register' element={<Register />} />
 									<Route element={<PrivateOutlet />}>
 										<Route path='/account' element={<Profile />} />
 									</Route>
@@ -46,6 +52,8 @@ const App: React.FC = (): JSX.Element => {
 											<Route element={<ProtectedOutlet />}>
 												<Route path='edit' element={<EditProduct />} />
 											</Route>
+										</Route>
+										<Route element={<ProtectedOutlet />}>
 											<Route path='add' element={<AddProduct />} />
 										</Route>
 									</Route>

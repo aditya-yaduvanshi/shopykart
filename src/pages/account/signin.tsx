@@ -1,54 +1,57 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from '../../redux';
+import {useNavigate} from 'react-router-dom';
+import {useSelector} from '../../redux';
+import {Container} from 'react-bootstrap';
 
 const SignIn: React.FC = (): JSX.Element => {
-	const {signedIn} = useSelector(state => state.auth);
+	const {user} = useSelector((state) => state.auth);
 	const navigate = useNavigate();
 
-	if(signedIn) navigate('/');
+	if (user) navigate('/');
 
 	return (
 		<>
-			<form>
-				<div className='mb-3'>
-					<label htmlFor='exampleInputEmail1' className='form-label'>
-						Email address
-					</label>
-					<input
-						type='email'
-						className='form-control'
-						id='exampleInputEmail1'
-						aria-describedby='emailHelp'
-					/>
-					<div id='emailHelp' className='form-text'>
-						We'll never share your email with anyone else.
+			<Container>
+				<form>
+					<div className='mb-3'>
+						<label htmlFor='exampleInputEmail1' className='form-label'>
+							Email address
+						</label>
+						<input
+							type='email'
+							className='form-control'
+							id='exampleInputEmail1'
+							aria-describedby='emailHelp'
+						/>
+						<div id='emailHelp' className='form-text'>
+							We'll never share your email with anyone else.
+						</div>
 					</div>
-				</div>
-				<div className='mb-3'>
-					<label htmlFor='exampleInputPassword1' className='form-label'>
-						Password
-					</label>
-					<input
-						type='password'
-						className='form-control'
-						id='exampleInputPassword1'
-					/>
-				</div>
-				<div className='mb-3 form-check'>
-					<input
-						type='checkbox'
-						className='form-check-input'
-						id='exampleCheck1'
-					/>
-					<label className='form-check-label' htmlFor='exampleCheck1'>
-						Check me out
-					</label>
-				</div>
-				<button type='submit' className='btn btn-primary'>
-					Submit
-				</button>
-			</form>
+					<div className='mb-3'>
+						<label htmlFor='exampleInputPassword1' className='form-label'>
+							Password
+						</label>
+						<input
+							type='password'
+							className='form-control'
+							id='exampleInputPassword1'
+						/>
+					</div>
+					<div className='mb-3 form-check'>
+						<input
+							type='checkbox'
+							className='form-check-input'
+							id='exampleCheck1'
+						/>
+						<label className='form-check-label' htmlFor='exampleCheck1'>
+							Check me out
+						</label>
+					</div>
+					<button type='submit' className='btn btn-primary'>
+						Submit
+					</button>
+				</form>
+			</Container>
 		</>
 	);
 };
